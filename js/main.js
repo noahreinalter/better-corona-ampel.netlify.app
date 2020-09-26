@@ -17,9 +17,9 @@ info.onAdd = function (map) {
 };
 
 info.update = function (props) {
-	this._div.innerHTML = '<h4>Täglicher Wochen-/Tages-Mittelwert der Infizierten pro 100.000 Einwohner</h4>' +  (props ?
+	this._div.innerHTML = text1 +  (props ?
 		'<b>' + props.name + '</b><br />' + props.value
-		: 'Bewegen Sie die Maus über einen Bezirk, um den Wert zu sehen');
+		: text2);
 };
 
 info.addTo(map);
