@@ -1,6 +1,11 @@
 readCsv('data/rawData.csv');
 
-var map = L.map('map', { zoomControl: false }).setView([47.5573696, 13.8831908], 7);
+var latitude = 47.5573696
+var longitude = 13.8831908
+var zoom = 7
+
+var map = L.map('map', { zoomControl: false }).setView([latitude, longitude], zoom);
+var zoomed = false;
 
 // control that shows state info on hover
 var info = L.control();
@@ -101,8 +106,19 @@ function resetHighlight(e) {
 function onEachFeature(feature, layer) {
 	layer.on({
 		mouseover: highlightFeature,
-		mouseout: resetHighlight
+		mouseout: resetHighlight,
+		click: zoomToFeature
 	});
+}
+
+function zoomToFeature(e) {
+	if(e.target.feature.properties.name === zoomed){
+		map.setView([latitude, longitude], zoom);
+		zoomed = false;
+	}else{
+		map.fitBounds(e.target.getBounds());
+		zoomed = e.target.feature.properties.name;
+	}
 }
 
 var legend = L.control({position: 'bottomright'});
