@@ -116,7 +116,7 @@ function zoomToFeature(e) {
 		map.setView([latitude, longitude], zoom);
 		zoomed = false;
 	}else{
-		map.fitBounds(e.target.getBounds());
+		map.fitBounds(e.target.getBounds(), {padding: [100,100]});
 		zoomed = e.target.feature.properties.name;
 	}
 }
