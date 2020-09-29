@@ -1,4 +1,7 @@
-readCsv('data/rawData.csv');
+
+var date = new Date();
+findFileOpenIfFound(date);
+
 
 var latitude = 47.5573696
 var longitude = 13.8831908
@@ -179,4 +182,21 @@ function oneDayChange(argument) {
 		resultArray[i] = (typeof cache || false) === 'string' ? parseFloat(cache.replace(',','.')) * 14 : cache * 14;
 	}
 	return resultArray;
+}
+
+function findFileOpenIfFound(toCheckDate) {
+	var fileName = 'data/rawData' + '_' + toCheckDate.getDate()+'.'+(toCheckDate.getMonth()+1)+'.'+toCheckDate.getFullYear() + '.csv';
+	$.ajax({
+	    url:fileName,
+	    type:'HEAD',
+	    error: function()
+	    {
+	        date.setDate(date.getDate() -1);
+	        findFileOpenIfFound(date);
+	    },
+	    success: function()
+	    {
+	        readCsv(fileName);
+	    }
+	});	
 }
