@@ -154,6 +154,9 @@ legend.addTo(map);
 
 function fuser(data1, weight1, data2, weight2) {
 	let resultArray = [];
+	if (Number.EPSILON === undefined) {
+    	Number.EPSILON = Math.pow(2, -52);
+	}
 	for (var i = 0; i < data1.length; i++) {
 		resultArray[i] = Math.round((((data1[i] * weight1 + data2[i] * weight2) * (5/70))+ Number.EPSILON) * 100) / 100;
 	}
@@ -164,7 +167,7 @@ function sevenDayChange(argument) {
 	let resultArray = [];
 	for (var i = 0; i < argument.data.length; i++){
 		cache = argument.data[i]["Δ 7 Tage / 100.000 EW"];
-		resultArray[i] = typeof cache === 'string' ? parseFloat(cache.replace(',','.')) * 2 : cache * 2;
+		resultArray[i] = (typeof cache || false) === 'string' ? parseFloat(cache.replace(',','.')) * 2 : cache * 2;
 	}
 	return resultArray;
 }
@@ -173,7 +176,7 @@ function oneDayChange(argument) {
 	let resultArray = [];
 	for (var i = 0; i < argument.data.length; i++){
 		cache = argument.data[i]["Δ Vortag / 100.000 EW"]
-		resultArray[i] = typeof cache === 'string' ? parseFloat(cache.replace(',','.')) * 14 : cache * 14;
+		resultArray[i] = (typeof cache || false) === 'string' ? parseFloat(cache.replace(',','.')) * 14 : cache * 14;
 	}
 	return resultArray;
 }
