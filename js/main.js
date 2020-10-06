@@ -155,9 +155,11 @@ function zoomToFeature(e) {
 	if(e.target.feature.properties.name === zoomed){
 		map.setView([latitude, longitude], zoom);
 		zoomed = false;
+		$(".datePicker").show();
 	}else{
 		map.fitBounds(e.target.getBounds(), {padding: [100,100]});
 		zoomed = e.target.feature.properties.name;
+		$(".datePicker").hide();
 	}
 }
 
