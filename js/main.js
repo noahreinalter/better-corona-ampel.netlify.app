@@ -1,4 +1,9 @@
+var loadedDay;
+var geojson; 
+var valueList = {};
 
+var firstRecordedDay = new Date("09/14/2020");
+var dateCache = new Date("09/14/2020");
 var date = new Date();
 date.setDate(date.getDate() -1);
 findFileOpenIfFound(date);
@@ -10,6 +15,20 @@ var zoom = 7
 
 var map = L.map('map', { zoomControl: false }).setView([latitude, longitude], zoom);
 var zoomed = false;
+
+//DatePicker
+var datePickerWidget =  L.Control.extend({
+	options: {
+		position: 'topleft'
+	},
+
+	onAdd: function (map) {
+		this._div = L.DomUtil.create('div', 'datePicker');
+		return this._div;
+	}
+});
+map.addControl(new datePickerWidget());
+
 
 // control that shows state info on hover
 var info = L.control();
@@ -37,9 +56,7 @@ map.keyboard.disable();
 if (map.tap) map.tap.disable();
 document.getElementById('map').style.cursor='default';
 
-var geojson;
-
-function readCsv(file) {
+function loadCsv(file) {
 	Papa.parse(file, {
 		download: true,
 		dynamicTyping: true,
@@ -51,6 +68,12 @@ function readCsv(file) {
 			for (var i = 0; i < finalData.length; i++) {
 				if(bezirke_999_geo["features"][i]["properties"]["name"] === results.data[i]["Bezirk"]){
 					bezirke_999_geo["features"][i]["properties"]["value"] = finalData[i];
+					var cache = {};
+					cache["Bezirk"] = results.data[i]["Bezirk"];
+					cache["value"] = finalData[i];
+					valueList[i] = cache;
+					valueList.length == undefined ? valueList.length = 1 : valueList.length++;
+
 				}else{
 					console.log(bezirke_999_geo["features"][i]["properties"]["name"] + " and " + results.data[i]["Bezirk"]);
 					bezirke_999_geo["features"][i]["properties"]["value"] = -50000;
@@ -59,11 +82,24 @@ function readCsv(file) {
 			}
 
 			geojson = L.geoJson(bezirke_999_geo, {
-				style: style,
+				style: styleGeojson,
 				onEachFeature: onEachFeature
 			}).addTo(map);
 
 			map.attributionControl.addAttribution('Map Data &copy; <a href="https://github.com/ginseng666/GeoJSON-TopoJSON-Austria/">Flooh Perlot</a>' + ' ,  Infection Data ©; <a href="https://orf.at/corona/stories/daten/">ORF.at</a>');
+			$( ".datePicker" ).datepicker({
+				minDate: firstRecordedDay,
+				maxDate: date,
+				onSelect: function(dateText) {
+					var selectedDate = new Date(dateText);
+					if(loadedDay.getTime() !== selectedDate.getTime()){
+						map.eachLayer(function (layer) {
+							map.removeLayer(layer);
+						});
+						loadCsv('data/rawData_' + selectedDate.getDate()+'.'+(selectedDate.getMonth()+1)+'.'+selectedDate.getFullYear() + '.csv')
+					}
+    			} 
+			});
 		}
 	});
 }
@@ -74,7 +110,7 @@ function getColor(value) {
            value > -10000 ? '#5fb56f' :
                       '#0000ff';}
 
-function style(feature) {
+function styleGeojson(feature) {
     return {
         fillColor: getColor(parseFloat(feature.properties.value)),
         weight: 2,
@@ -186,7 +222,7 @@ function oneDayChange(argument) {
 }
 
 function findFileOpenIfFound(toCheckDate) {
-	var fileName = 'data/rawData' + '_' + toCheckDate.getDate()+'.'+(toCheckDate.getMonth()+1)+'.'+toCheckDate.getFullYear() + '.csv';
+	var fileName = 'data/rawData_' + toCheckDate.getDate()+'.'+(toCheckDate.getMonth()+1)+'.'+toCheckDate.getFullYear() + '.csv';
 	$.ajax({
 	    url:fileName,
 	    type:'HEAD',
@@ -197,7 +233,18 @@ function findFileOpenIfFound(toCheckDate) {
 	    },
 	    success: function()
 	    {
-	        readCsv(fileName);
+	    	loadedDay = date;
+	        loadCsv(fileName);
 	    }
 	});	
+}
+
+function maxValueFromList(list) {
+	var max;
+	for(var i = 0; i < list.length; i++){
+		if(max == undefined || max.value < list[i].value){
+			max = list[i];
+		}
+	}
+	return max;
 }
