@@ -64,6 +64,7 @@ function loadCsv(file) {
 		complete: function(results) {
 
 			finalData = fuser(sevenDayChange(results), 0.5, oneDayChange(results), 0.5);
+			valueList.length = 0;
 
 			for (var i = 0; i < finalData.length; i++) {
 				if(bezirke_999_geo["features"][i]["properties"]["name"] === results.data[i]["Bezirk"]){
