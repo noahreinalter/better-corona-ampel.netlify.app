@@ -1,6 +1,7 @@
 var loadedDay;
 var geojson; 
 var valueList = {};
+var text;
 
 var firstRecordedDay = new Date("09/14/2020");
 var dateCache = new Date("09/14/2020");
@@ -40,7 +41,7 @@ info.onAdd = function (map) {
 };
 
 info.update = function (props) {
-	this._div.innerHTML = text1 +  (props ?
+	this._div.innerHTML = text +  (props ?
 		'<b>' + props.name + '</b><br />' + props.value
 		: text2);
 };
@@ -62,8 +63,18 @@ function loadCsv(file) {
 		dynamicTyping: true,
 		header: true,
 		complete: function(results) {
+			if(results.data[0]["Δ Vortag / 100.000 EW"] == undefined){
+				text = text3;
+				info.update();
 
-			finalData = fuser(sevenDayChange(results), 0.5, oneDayChange(results), 0.5);
+				var sevenDayData = sevenDayChange(results, true);
+				finalData = fuser(sevenDayData, 1, sevenDayData, 0);
+			}else{
+				finalData = fuser(sevenDayChange(results, false), 0.5, oneDayChange(results), 0.5);
+				text = text1;
+				info.update();
+			}
+
 			valueList.length = 0;
 
 			for (var i = 0; i < finalData.length; i++) {
@@ -87,7 +98,7 @@ function loadCsv(file) {
 				onEachFeature: onEachFeature
 			}).addTo(map);
 
-			map.attributionControl.addAttribution('Map Data &copy; <a href="https://github.com/ginseng666/GeoJSON-TopoJSON-Austria/">Flooh Perlot</a>' + ' ,  Infection Data ©; <a href="https://orf.at/corona/stories/daten/">ORF.at</a>');
+			map.attributionControl.addAttribution('Map Data &copy; <a href="https://github.com/ginseng666/GeoJSON-TopoJSON-Austria/">Flooh Perlot</a>' + ' ,  Infection Data ©; <a href="https://orf.at/corona/daten/bezirke">ORF.at</a>');
 			$( ".datePicker" ).datepicker({
 				minDate: firstRecordedDay,
 				maxDate: date,
@@ -206,10 +217,14 @@ function fuser(data1, weight1, data2, weight2) {
 	return resultArray;
 }
 
-function sevenDayChange(argument) {
+function sevenDayChange(argument, newSystem) {
 	let resultArray = [];
 	for (var i = 0; i < argument.data.length; i++){
-		cache = argument.data[i]["Δ 7 Tage / 100.000 EW"];
+		if(newSystem){
+			cache = argument.data[i]["Δ 100.000 / 7 Tage"];
+		}else{
+			cache = argument.data[i]["Δ 7 Tage / 100.000 EW"];
+		}
 		resultArray[i] = (typeof cache || false) === 'string' ? parseFloat(cache.replace(',','.')) * 2 : cache * 2;
 	}
 	return resultArray;
@@ -218,7 +233,7 @@ function sevenDayChange(argument) {
 function oneDayChange(argument) {
 	let resultArray = [];
 	for (var i = 0; i < argument.data.length; i++){
-		cache = argument.data[i]["Δ Vortag / 100.000 EW"]
+		cache = argument.data[i]["Δ Vortag / 100.000 EW"];
 		resultArray[i] = (typeof cache || false) === 'string' ? parseFloat(cache.replace(',','.')) * 14 : cache * 14;
 	}
 	return resultArray;

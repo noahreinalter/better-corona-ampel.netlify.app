@@ -14,12 +14,12 @@ Eisenstadt-Umgebung,"48,92","6,99"
 Feldkirch,"44,39","2,77"
 Feldkirchen,"-6,68",0
 Freistadt,"43,53",3
-Gmunden,"18,7","3,94"
+Gänserndorf,"74,26","6,75"
 Gmünd,"48,95","16,32"
+Gmunden,"18,7","3,94"
 Graz,"33,59","2,42"
 Graz-Umgebung,"23,99","4,54"
 Grieskirchen,"46,35","18,54"
-Gänserndorf,"74,26","6,75"
 Güssing,"15,51",0
 Hallein,"39,75","1,66"
 Hartberg-Fürstenfeld,"25,38","3,31"
@@ -27,13 +27,13 @@ Hermagor,0,0
 Hollabrunn,"25,56",0
 Horn,"12,87",0
 Imst,"71,6","1,67"
-Innsbruck,"121,87","8,33"
 Innsbruck-Land,"99,82","1,67"
+Innsbruck-Stadt,"121,87","8,33"
 Jennersdorf,"11,72",0
 Kirchdorf an der Krems,"17,59","3,52"
 Kitzbühel,"31,31",0
-Klagenfurt,"7,94","0,99"
 Klagenfurt Land,"11,71","1,67"
+Klagenfurt Stadt,"7,94","0,99"
 Korneuburg,"57,21","7,7"
 Krems (Land),"65,38","15,9"
 Krems an der Donau,"112,56","12,06"
@@ -42,16 +42,16 @@ Landeck,"96,93",0
 Leibnitz,"20,2","1,19"
 Leoben,"19,98",0
 Lienz,"28,72",0
-Liezen (inkl. Gröbming),"18,77","2,5"
+Liezen,"18,77","2,5"
 Lilienfeld,"23,25","7,75"
 Linz,"67,57","0,97"
 Linz-Land,"61,89","2,66"
 Mattersburg,"7,51",0
 Melk,"60,29","20,52"
 Mistelbach,"56,97","9,27"
+Mödling,"42,86","12,61"
 Murau,"50,62","7,23"
 Murtal,"12,5","4,17"
-Mödling,"42,86","12,61"
 Neunkirchen,"93,87","23,18"
 Neusiedl am See,"40,3","1,68"
 Oberpullendorf,"18,66","-2,67"
@@ -67,9 +67,9 @@ Sankt Johann im Pongau,"47,16","6,21"
 Sankt Pölten,"43,6","9,08"
 Sankt Pölten (Land),29,"4,58"
 Sankt Veit an der Glan,"9,17","3,67"
+Schärding,"5,23","1,74"
 Scheibbs,"26,57","9,66"
 Schwaz,"96,57","4,77"
-Schärding,"5,23","1,74"
 Spittal an der Drau,"6,57","1,31"
 Steyr,"20,95",0
 Steyr-Land,"14,89","3,31"
@@ -77,10 +77,10 @@ Südoststeiermark,"8,31","1,19"
 Tamsweg,"14,76",0
 Tulln,"44,33","11,56"
 Urfahr-Umgebung,"25,73","11,7"
-Villach,"35,35","6,43"
 Villach Land,"30,93","10,82"
-Voitsberg,"9,77","1,95"
+Villach Stadt,"35,35","6,43"
 Vöcklabruck,"38,9","4,4"
+Voitsberg,"9,77","1,95"
 Völkermarkt,"9,55",0
 Waidhofen an der Thaya,"96,57","7,73"
 Waidhofen an der Ybbs,"8,88","8,88"
