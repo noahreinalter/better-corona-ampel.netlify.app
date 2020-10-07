@@ -4,6 +4,7 @@ var valueList = {};
 var text;
 
 var firstRecordedDay = new Date("09/14/2020");
+var changeDay = new Date("10/06/2020");
 var dateCache = new Date("09/14/2020");
 var date = new Date();
 date.setDate(date.getDate() -1);
@@ -110,7 +111,14 @@ function loadCsv(file) {
 						});
 						loadCsv('data/rawData_' + selectedDate.getDate()+'.'+(selectedDate.getMonth()+1)+'.'+selectedDate.getFullYear() + '.csv')
 					}
-    			} 
+				},
+				beforeShowDay: function(date) {
+					if (changeDay <= date) {
+						return [true, "Highlighted", ''];
+					}else {
+						return [true, '', ''];
+					}
+				} 
 			});
 		}
 	});
