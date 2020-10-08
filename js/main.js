@@ -64,6 +64,10 @@ function loadCsv(file) {
 		dynamicTyping: true,
 		header: true,
 		complete: function(results) {
+			map.eachLayer(function (layer) {
+				map.removeLayer(layer);
+			});
+
 			if(results.data[0]["Bundesland"] != undefined){
 				text = text3;
 				info.update();
@@ -106,9 +110,6 @@ function loadCsv(file) {
 				onSelect: function(dateText) {
 					var selectedDate = new Date(dateText);
 					if(loadedDay.getTime() !== selectedDate.getTime()){
-						map.eachLayer(function (layer) {
-							map.removeLayer(layer);
-						});
 						loadCsv('data/rawData_' + selectedDate.getDate()+'.'+(selectedDate.getMonth()+1)+'.'+selectedDate.getFullYear() + '.csv')
 					}
 				},
