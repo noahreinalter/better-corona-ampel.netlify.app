@@ -64,14 +64,14 @@ function loadCsv(file) {
 		dynamicTyping: true,
 		header: true,
 		complete: function(results) {
-			if(results.data[0]["Δ Vortag / 100.000 EW"] == undefined){
+			if(results.data[0]["Bundesland"] != undefined){
 				text = text3;
 				info.update();
 
-				var sevenDayData = sevenDayChange(results, true);
+				var sevenDayData = sevenDayChange(results);
 				finalData = fuser(sevenDayData, 1, sevenDayData, 0);
 			}else{
-				finalData = fuser(sevenDayChange(results, false), 0.5, oneDayChange(results), 0.5);
+				finalData = fuser(sevenDayChange(results), 0.5, oneDayChange(results), 0.5);
 				text = text1;
 				info.update();
 			}
@@ -225,14 +225,11 @@ function fuser(data1, weight1, data2, weight2) {
 	return resultArray;
 }
 
-function sevenDayChange(argument, newSystem) {
+function sevenDayChange(argument) {
 	let resultArray = [];
 	for (var i = 0; i < argument.data.length; i++){
-		if(newSystem){
-			cache = argument.data[i]["Δ 100.000 / 7 Tage"];
-		}else{
-			cache = argument.data[i]["Δ 7 Tage / 100.000 EW"];
-		}
+		cache = argument.data[i]["Δ 7 Tage / 100.000 EW"];
+
 		resultArray[i] = (typeof cache || false) === 'string' ? parseFloat(cache.replace(',','.')) * 2 : cache * 2;
 	}
 	return resultArray;
