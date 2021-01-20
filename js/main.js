@@ -103,7 +103,8 @@ function loadCsv(file) {
 				onEachFeature: onEachFeature
 			}).addTo(map);
 
-			map.attributionControl.addAttribution('Map Data &copy; <a href="https://github.com/ginseng666/GeoJSON-TopoJSON-Austria/">Flooh Perlot</a>' + ' ,  Infection Data ©; <a href="https://orf.at/corona/daten/bezirke">ORF.at</a>');
+			map.attributionControl.addAttribution('Map Data &copy; <a href="https://github.com/ginseng666/GeoJSON-TopoJSON-Austria/">Flooh Perlot</a>' + ' ,  Infection Data &copy; <a href="https://orf.at/corona/daten/bezirke">ORF.at</a>' +
+				' ,	<a href="https://github.com/noahreinalter/better-corona-ampel.netlify.app">Source Code</a>');
 			$( ".datePicker" ).datepicker({
 				minDate: firstRecordedDay,
 				maxDate: date,
