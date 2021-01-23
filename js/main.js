@@ -1,25 +1,24 @@
-var loadedDay;
-var geojson; 
-var valueList = {};
-var text;
+let loadedDay;
+let geojson;
+const valueList = [];
+let text;
 
-var firstRecordedDay = new Date("09/14/2020");
-var changeDay = new Date("10/06/2020");
-var dateCache = new Date("09/14/2020");
-var date = new Date();
+const firstRecordedDay = new Date("09/14/2020");
+const changeDay = new Date("10/06/2020");
+const date = new Date();
 date.setDate(date.getDate() -1);
 findFileOpenIfFound(date);
 
 
-var latitude = 47.5573696
-var longitude = 13.8831908
-var zoom = 7
+const latitude = 47.5573696;
+const longitude = 13.8831908;
+const zoom = 7;
 
-var map = L.map('map', { zoomControl: false }).setView([latitude, longitude], zoom);
-var zoomed = false;
+const map = L.map('map', {zoomControl: false}).setView([latitude, longitude], zoom);
+let zoomed = false;
 
 //DatePicker
-var datePickerWidget =  L.Control.extend({
+const datePickerWidget = L.Control.extend({
 	options: {
 		position: 'topleft'
 	},
@@ -33,7 +32,7 @@ map.addControl(new datePickerWidget());
 
 
 // control that shows state info on hover
-var info = L.control();
+const info = L.control();
 
 info.onAdd = function (map) {
 	this._div = L.DomUtil.create('div', 'info');
@@ -68,29 +67,27 @@ function loadCsv(file) {
 				map.removeLayer(layer);
 			});
 
-			if(results.data[0]["Bundesland"] != undefined){
+			let finalData;
+			if (results.data[0]["Bundesland"] !== undefined) {
 				text = text3;
 				info.update();
 
-				var sevenDayData = sevenDayChange(results);
-				finalData = fuser(sevenDayData, 1, sevenDayData, 0);
-			}else{
-				finalData = fuser(sevenDayChange(results), 0.5, oneDayChange(results), 0.5);
+				const sevenDayData = sevenDayChange(results);
+				finalData = combiner(sevenDayData, 1, sevenDayData, 0);
+			} else {
+				finalData = combiner(sevenDayChange(results), 0.5, oneDayChange(results), 0.5);
 				text = text1;
 				info.update();
 			}
 
-			valueList.length = 0;
-
-			for (var i = 0; i < finalData.length; i++) {
+			for (let i = 0; i < finalData.length; i++) {
 				if(bezirke_999_geo["features"][i]["properties"]["name"] === results.data[i]["Bezirk"]){
 					bezirke_999_geo["features"][i]["properties"]["value"] = finalData[i];
-					var cache = {};
+					const cache = {};
 					cache["Bezirk"] = results.data[i]["Bezirk"];
 					cache["value"] = finalData[i];
-					valueList[i] = cache;
-					valueList.length == undefined ? valueList.length = 1 : valueList.length++;
 
+					valueList[i] = cache;
 				}else{
 					console.log(bezirke_999_geo["features"][i]["properties"]["name"] + " and " + results.data[i]["Bezirk"]);
 					bezirke_999_geo["features"][i]["properties"]["value"] = -50000;
@@ -144,7 +141,7 @@ function styleGeojson(feature) {
 }
 
 function highlightFeature(e) {
-	var layer = e.target;
+	const layer = e.target;
 
 	layer.setStyle({
 		weight: 5,
@@ -185,17 +182,17 @@ function zoomToFeature(e) {
 	}
 }
 
-var legend = L.control({position: 'bottomright'});
+const legend = L.control({position: 'bottomright'});
 
 legend.onAdd = function (map) {
 
-	var div = L.DomUtil.create('div', 'info legend'),
+	let div = L.DomUtil.create('div', 'info legend'),
 		grades = [0, 0.71, 7.1],
 		colorGrades = [0, 0.72, 7.2],
 		labels = [],
 		from, to;
 
-	for (var i = 0; i < grades.length; i++) {
+	for (let i = 0; i < grades.length; i++) {
 		from = grades[i];
 		to = grades[i + 1];
 
@@ -216,12 +213,12 @@ legend.addTo(map);
 
 
 
-function fuser(data1, weight1, data2, weight2) {
+function combiner(data1, weight1, data2, weight2) {
 	let resultArray = [];
 	if (Number.EPSILON === undefined) {
     	Number.EPSILON = Math.pow(2, -52);
 	}
-	for (var i = 0; i < data1.length; i++) {
+	for (let i = 0; i < data1.length; i++) {
 		resultArray[i] = Math.round((((data1[i] * weight1 + data2[i] * weight2) * (5/70))+ Number.EPSILON) * 100) / 100;
 	}
 	return resultArray;
@@ -229,25 +226,27 @@ function fuser(data1, weight1, data2, weight2) {
 
 function sevenDayChange(argument) {
 	let resultArray = [];
-	for (var i = 0; i < argument.data.length; i++){
+	let cache;
+	for (let i = 0; i < argument.data.length; i++) {
 		cache = argument.data[i]["Δ 7 Tage / 100.000 EW"];
 
-		resultArray[i] = (typeof cache || false) === 'string' ? parseFloat(cache.replace(',','.')) * 2 : cache * 2;
+		resultArray[i] = (typeof cache || false) === 'string' ? parseFloat(cache.replace(',', '.')) * 2 : cache * 2;
 	}
 	return resultArray;
 }
 
 function oneDayChange(argument) {
 	let resultArray = [];
-	for (var i = 0; i < argument.data.length; i++){
+	let cache;
+	for (let i = 0; i < argument.data.length; i++) {
 		cache = argument.data[i]["Δ Vortag / 100.000 EW"];
-		resultArray[i] = (typeof cache || false) === 'string' ? parseFloat(cache.replace(',','.')) * 14 : cache * 14;
+		resultArray[i] = (typeof cache || false) === 'string' ? parseFloat(cache.replace(',', '.')) * 14 : cache * 14;
 	}
 	return resultArray;
 }
 
 function findFileOpenIfFound(toCheckDate) {
-	var fileName = 'data/rawData_' + toCheckDate.getDate()+'.'+(toCheckDate.getMonth()+1)+'.'+toCheckDate.getFullYear() + '.csv';
+	const fileName = 'data/rawData_' + toCheckDate.getDate() + '.' + (toCheckDate.getMonth() + 1) + '.' + toCheckDate.getFullYear() + '.csv';
 	$.ajax({
 	    url:fileName,
 	    type:'HEAD',
@@ -265,9 +264,9 @@ function findFileOpenIfFound(toCheckDate) {
 }
 
 function maxValueFromList(list) {
-	var max;
-	for(var i = 0; i < list.length; i++){
-		if(max == undefined || max.value < list[i].value){
+	let max;
+	for(let i = 0; i < list.length; i++){
+		if(max === undefined || max.value < list[i].value){
 			max = list[i];
 		}
 	}
