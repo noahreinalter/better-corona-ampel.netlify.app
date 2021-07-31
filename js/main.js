@@ -32,7 +32,7 @@ function mapSetup(){
 	map.keyboard.disable();
 	if (map.tap) map.tap.disable();
 	document.getElementById('map').style.cursor='default';
-	map.attributionControl.addAttribution('Map Data &copy; <a href="https://github.com/ginseng666/GeoJSON-TopoJSON-Austria/">Flooh Perlot</a>' + ' ,  Infection Data &copy; <a href="https://orf.at/corona/daten/bezirke">ORF.at</a>' +
+	map.attributionControl.addAttribution('Map Data &copy; <a href="https://github.com/ginseng666/GeoJSON-TopoJSON-Austria/">Flooh Perlot</a>' + ' ,  Infection Data &copy; <a href="https://orf.at/corona/daten/bezirke">ORF.at</a> & <a href="https://www.data.gv.at/covid-19">data.gv.at</a>' +
 		' ,	<a href="https://github.com/noahreinalter/better-corona-ampel.netlify.app">Source Code</a>');
 
 
@@ -158,7 +158,33 @@ function loadCsv(file, map, info) {
 		header: true,
 		complete: function(results) {
 			let finalData;
-			if (results.data[0]["Bundesland"] !== undefined) {
+			if (results.data[0]["GKZ"] !== undefined) {
+				text = text3;
+				info.update();
+
+				//Change some district names to match the ones in the geo.json
+				results.data[0]["Bezirk"] = "Eisenstadt"
+				results.data[1]["Bezirk"] = "Rust"
+				results.data[19]["Bezirk"] = "Krems an der Donau"
+				results.data[20]["Bezirk"] = "Sankt Pölten"
+				results.data[21]["Bezirk"] = "Waidhofen an der Ybbs"
+				results.data[22]["Bezirk"] = "Wiener Neustadt"
+				results.data[31]["Bezirk"] = "Krems (Land)"
+				results.data[37]["Bezirk"] = "Sankt Pölten (Land)"
+				results.data[41]["Bezirk"] = "Wiener Neustadt (Land)"
+				results.data[43]["Bezirk"] = "Linz"
+				results.data[44]["Bezirk"] = "Steyr"
+				results.data[45]["Bezirk"] = "Wels"
+				results.data[61]["Bezirk"] = "Salzburg"
+				results.data[67]["Bezirk"] = "Graz"
+
+
+				results.data.sort((a, b) => a["Bezirk"].localeCompare(b["Bezirk"]));
+
+				const sevenDayData = sevenDayChangeAbsoluteNumbers(results)
+				finalData = combiner(sevenDayData, 1, sevenDayData, 0)
+
+			}else if (results.data[0]["Bundesland"] !== undefined) {
 				text = text3;
 				info.update();
 
@@ -210,6 +236,17 @@ function combiner(data1, weight1, data2, weight2) {
 	}
 	for (let i = 0; i < data1.length; i++) {
 		resultArray[i] = Math.round((((data1[i] * weight1 + data2[i] * weight2) * (5/70))+ Number.EPSILON) * 100) / 100;
+	}
+	return resultArray;
+}
+
+function sevenDayChangeAbsoluteNumbers(argument) {
+	let resultArray = [];
+	let cache;
+	for (let i = 0; i < argument.data.length; i++) {
+		cache = (100000 / argument.data[i]["AnzEinwohner"]) * argument.data[i]["AnzahlFaelle7Tage"]
+
+		resultArray[i] = (typeof cache || false) === 'string' ? parseFloat(cache.replace(',', '.')) * 2 : cache * 2;
 	}
 	return resultArray;
 }
