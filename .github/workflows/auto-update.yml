@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
           cd data
-          today=$(date +'%d.%m.%Y')
+          today=$(date +'%-d.%-m.%Y')
           wget "https://covid19-dashboard.ages.at/data/CovidFaelle_GKZ.csv" -O rawdata_${today}.csv --ciphers 'DEFAULT:!DH'
           git config user.name Noah Reinalter
           git config user.email 38698485+noahreinalter@users.noreply.github.com
