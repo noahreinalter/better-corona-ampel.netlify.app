@@ -13,11 +13,13 @@ jobs:
       - uses: actions/checkout@v2
       - run: |
           cd data
-          export today=$(date +'%-d.%-m.%Y')
+          today=$(date +'%-d.%-m.%Y')
           wget "https://covid19-dashboard.ages.at/data/CovidFaelle_GKZ.csv" -O rawdata_${today}.csv --ciphers 'DEFAULT:!DH'
           git config user.name Noah Reinalter
           git config user.email 38698485+noahreinalter@users.noreply.github.com
+          echo ::set-output name=path::rawdata_${today}.csv
+        id: download
       - uses: noahreinalter/regex-match-file@v1.2
         with:
           regex_pattern: '(Bezirk;GKZ;AnzEinwohner;Anzahl;AnzahlTot;AnzahlFaelle7Tage)(\n.*(;\d+){5}){94}'
-          path: data/rawdata_${today}.csv
+          path: ${{ steps.download.outputs.path }}
