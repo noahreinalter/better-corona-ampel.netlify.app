@@ -19,7 +19,7 @@ jobs:
           git config user.email 38698485+noahreinalter@users.noreply.github.com
           echo ::set-output name=path::rawdata_${today}.csv
         id: download
-      - uses: noahreinalter/regex-match-file@v1.6
+      - uses: noahreinalter/regex-match-file@latest
         with:
           regex_pattern: '(Bezirk;GKZ;AnzEinwohner;Anzahl;AnzahlTot;AnzahlFaelle7Tage)(\n.*(;\d+){5}){94}'
           path: ${{ steps.download.outputs.path }}
