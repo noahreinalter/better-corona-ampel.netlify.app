@@ -22,5 +22,5 @@ jobs:
           git push
       - uses: noahreinalter/regex-match-file
         with:
-          regex_pattern: "(Bezirk;GKZ;AnzEinwohner;Anzahl;AnzahlTot;AnzahlFaelle7Tage)(\n.*(;\d+){5}){94}"
+          regex_pattern: '(Bezirk;GKZ;AnzEinwohner;Anzahl;AnzahlTot;AnzahlFaelle7Tage)(\n.*(;\d+){5}){94}'
           path: ${today}
