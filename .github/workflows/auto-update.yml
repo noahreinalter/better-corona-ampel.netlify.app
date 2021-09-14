@@ -17,7 +17,7 @@ jobs:
           wget "https://covid19-dashboard.ages.at/data/CovidFaelle_GKZ.csv" -O rawdata_${today}.csv --ciphers 'DEFAULT:!DH'
           git config user.name Noah Reinalter
           git config user.email 38698485+noahreinalter@users.noreply.github.com
-          echo ::set-output name=path::rawdata_${today}.csv
+          echo ::set-output name=path::data/rawdata_${today}.csv
         id: download
       - uses: noahreinalter/regex-match-file@latest
         with:
