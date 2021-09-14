@@ -19,8 +19,7 @@ jobs:
           git config user.email 38698485+noahreinalter@users.noreply.github.com
           git add .
           git commit -m "Data ${today}"
-          git push
-      - uses: noahreinalter/regex-match-file
+      - uses: noahreinalter/regex-match-file@v1.0
         with:
           regex_pattern: '(Bezirk;GKZ;AnzEinwohner;Anzahl;AnzahlTot;AnzahlFaelle7Tage)(\n.*(;\d+){5}){94}'
           path: ${today}
