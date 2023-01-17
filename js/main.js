@@ -59,9 +59,14 @@ function addDatePicker(map, info) {
 	});
 	map.addControl(new datePickerWidget());
 
+	let language = getLanguage();
+
 	$( ".datePicker" ).datepicker({
 		minDate: firstRecordedDay,
 		maxDate: date,
+		firstDay: 1,
+		dayNamesMin: getDayNames(language),
+		monthNames: getMonthNames(language),
 		onSelect: function(dateText) {
 			const selectedDate = new Date(dateText);
 			if(loadedDay.getTime() !== selectedDate.getTime()){
@@ -92,7 +97,7 @@ function addInfo(map){
 	info.update = function (props) {
 		this._div.innerHTML = text +  (props ?
 			'<b>' + props.name + '</b><br />' + props.value
-			: text2);
+			: getText2(getLanguage()));
 	};
 
 	info.addTo(map);
@@ -159,7 +164,7 @@ function loadCsv(file, map, info) {
 		complete: function(results) {
 			let finalData;
 			if (results.data[0]["GKZ"] !== undefined) {
-				text = text3;
+				text = getText3(getLanguage());
 				info.update();
 
 				//Change some district names to match the ones in the geo.json
@@ -185,14 +190,14 @@ function loadCsv(file, map, info) {
 				finalData = combiner(sevenDayData, 1, sevenDayData, 0)
 
 			}else if (results.data[0]["Bundesland"] !== undefined) {
-				text = text3;
+				text = getText3(getLanguage());
 				info.update();
 
 				const sevenDayData = sevenDayChange(results);
 				finalData = combiner(sevenDayData, 1, sevenDayData, 0);
 			} else {
 				finalData = combiner(sevenDayChange(results), 0.5, oneDayChange(results), 0.5);
-				text = text1;
+				text = getText1(getLanguage());
 				info.update();
 			}
 
@@ -349,4 +354,64 @@ function maxValueFromList(list) {
 		}
 	}
 	return max;
+}
+
+function getLanguage() {
+	let cache = window.location.pathname.split("/");
+
+	if(cache[1] == "") {
+		return "de";
+	} else {
+		return cache[1];
+	}
+}
+
+function getDayNames(language) {
+	switch (language) {
+		case "de":
+			return ["So", "Mo", "Di", "Mi", "Do", "Fr", "Sa"];
+		case "en":
+		default:
+			return ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+	}
+}
+
+function getMonthNames(language) {
+	switch (language) {
+		case "de":
+			return ["Jänner", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"];
+		case "en":
+		default:
+			return ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+	}
+}
+
+function getText1(language) {
+	switch (language) {
+		case "de":
+			return "<h4>Täglicher Wochen-/Tages-Mittelwert der Infizierten pro 100.000 Einwohner</h4>";
+		case "en":
+		default:
+			return "<h4>Daily Week-/Day-Average of the infected per 100.000 inhabitants</h4>";
+	}
+}
+
+function getText2(language) {
+	switch (language) {
+		case "de":
+			return "Bewegen Sie die Maus über einen Bezirk, um den Wert zu sehen. Klicken Sie um heranzuzoomen";
+		case "en":
+		default:
+			return "Move the curser over a district to see the value. Click to zoom.";
+	}
+}
+
+function getText3(language) {
+	switch (language) {
+		case "de":
+			return "<h4>Mittelwert der Infizierten pro 100.000 Einwohner in den letzten 7 Tagen</h4>";
+		case "en":
+		default:
+			return "<h4>Average of the infected per 100.000 inhabitants of the last 7 days</h4>";
+	}
 }
