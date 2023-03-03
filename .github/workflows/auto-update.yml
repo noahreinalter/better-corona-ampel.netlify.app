@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - run: |
           cd data
           today=$(date +'%-d.%-m.%Y')
@@ -20,9 +20,9 @@ jobs:
           git add .
           git commit -m "Data ${today}"
           git push
-          echo ::set-output name=path::data/rawdata_${today}.csv
+          echo "PATH=data/rawdata_${today}.csv" >> $GITHUB_OUTPUT
         id: download
       - uses: noahreinalter/regex-match-file@latest
         with:
           regex_pattern: '(Bezirk;GKZ;AnzEinwohner;Anzahl;AnzahlTot;AnzahlFaelle7Tage)(\n.*(;\d+){5}){94}'
-          path: ${{ steps.download.outputs.path }}
+          path: ${{ steps.download.outputs.PATH }}
