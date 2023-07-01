@@ -1,0 +1,74 @@
+﻿<!doctype html>
+<html lang="de">
+<head>
+    <title>AGES Dashboard COVID19</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="./css/bootstrap-4.5.0/css/bootstrap-custom.min.css">
+    <link rel="stylesheet" type="text/css" href="./css/styles2.css">
+
+</head>
+<body>
+    <header>
+
+        <div class="container-fluid pt-4 d-md-flex " id="mainnav">
+            <div class=" ">
+                <p class="h1">AGES Dashboard COVID19</p>
+            </div>
+            <div class="ml-auto langnav text-right mt-4 mt-md-n3">
+                <img src="images/ages_logo_weiss_FD.png" alt="AGES Dashboard Startseite" class="ml-4" style="width: 130px;" />
+            </div>
+
+        </div>
+
+
+    </header><main>
+                                    
+
+
+                 <article class="container-fluid" id="content" tabindex="-1">
+
+<div class="modal position-relative d-block" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark">
+      <div class="modal-header">
+        <h5 class="modal-title">ACHTUNG: Ende der SARS-CoV-2 Meldepflicht</h5>
+      </div>
+      <div class="modal-body">
+        <p>
+          <b>Information:</b> Mit 01. Juli 2023 besteht für Infektionen mit SARS-CoV-2 keine Meldepflicht mehr. Der Betrieb des AGES-Dashboards wird daher nicht mehr fortgeführt. Die Daten des Dashboards stehen im CSV-Format noch bis 31. Juli 2023 unter „Downloads“ zur Verfügung. 
+        </p>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-outline-light" href="./data/data.zip">Downloads</a>
+        <!--
+        <a class="btn btn-outline-light" href="https://www.data.gv.at/covid-19/">Open Data Download  [data.gv.at]</a>
+        -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+                     <p>&nbsp;</p>
+
+                 </article>
+    </main>
+    <footer>
+        <div class="container-fluid d-flex py-2" id="footernav">
+            <div>© <a href="https://www.ages.at">AGES</a>, <a href="mailto:covid19-dashboard@ages.at">covid19-dashboard@ages.at</a></div>
+            <div class="ml-auto mr-0">
+                <ul>
+                    <li>
+                        <a href="https://www.ages.at/ages/allgemeines/rechtliches/impressum/">Impressum [ages.at]</a>
+                    </li>
+                    <li>
+                        <a href="https://www.ages.at/ages/allgemeines/rechtliches/datenschutzerklaerung/">Datenschutz [ages.at]</a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
